@@ -3,9 +3,7 @@ import { AccountModule } from './account/account.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { GraphQLModule } from '@nestjs/graphql';
-import { join } from 'path';
-import { AccountResolver } from './account/resolver/account.resolver';  // Adicionando o import da função 'join'
-// Importe o resolver
+import { SubcategoryModule } from './subcategory/subcategory.module';
 
 @Module({
   imports: [
@@ -19,14 +17,13 @@ import { AccountResolver } from './account/resolver/account.resolver';  // Adici
       autoLoadEntities: true,
       synchronize: true,
     }),
-    AccountModule,
-
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
+      autoSchemaFile: true,
       playground: true,
-      autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
     }),
+    AccountModule,
+    SubcategoryModule,
   ],
-  providers: [AccountResolver], // Adicione o AccountResolver aqui
 })
 export class AppModule {}
