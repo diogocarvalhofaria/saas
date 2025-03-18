@@ -4,6 +4,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { GraphQLModule } from '@nestjs/graphql';
 import { SubcategoryModule } from './subcategory/subcategory.module';
+import { ApolloServerPluginLandingPageGraphQLPlayground } from '@apollo/server-plugin-landing-page-graphql-playground';
+import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default';
 
 @Module({
   imports: [
@@ -14,13 +16,20 @@ import { SubcategoryModule } from './subcategory/subcategory.module';
       username: 'root',
       password: 'mestre',
       database: 'account',
-      autoLoadEntities: true,
+      entities: ['dist/**/*.entity{.ts,.js}'],
       synchronize: true,
     }),
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
       autoSchemaFile: true,
-      playground: true,
+      playground: false,
+      subscriptions: {
+        'graphql-ws': {
+          connectionInitWaitTimeout: 10000,
+        },
+      },
+      installSubscriptionHandlers: true,
+      plugins: [ApolloServerPluginLandingPageLocalDefault()],
     }),
     AccountModule,
     SubcategoryModule,
