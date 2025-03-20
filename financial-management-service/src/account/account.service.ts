@@ -15,7 +15,7 @@ export class AccountService {
   }
 
 
-  async create(data: CreateAccountInput): Promise<Category> {
+  async createAccount(data: CreateAccountInput): Promise<Category> {
     const account = this.Repository.create(data);
     const accountSaved = await this.Repository.save(account);
 
@@ -26,15 +26,15 @@ export class AccountService {
     return accountSaved;
   }
 
-  async findAll():Promise<Category[]> {
-    return await this.Repository.createQueryBuilder('account').getMany()
+  async findAllAccount(): Promise<Category[]> {
+    return await this.Repository.createQueryBuilder('account').getMany();
   }
 
-  async findAllWithDeleted(): Promise<Category[]> {
-    return await this.Repository.createQueryBuilder('account').withDeleted().getMany()
+  async findAllAccountWithDeleted(): Promise<Category[]> {
+    return await this.Repository.createQueryBuilder('account').withDeleted().getMany();
   }
 
-  async findById(id: string) {
+  async findAccountById(id: string) {
     const account = await this.Repository.createQueryBuilder('account')
       .where('id = :id', { id: id })
       .getOne();
@@ -43,17 +43,17 @@ export class AccountService {
     return account;
   }
 
-  async update(id: string, data: UpdateAccountInput): Promise<Category> {
-    const account = await this.findById(id);
-    if (!account){
+  async updateAccount(id: string, data: UpdateAccountInput): Promise<Category> {
+    const account = await this.findAccountById(id);
+    if (!account) {
       throw new InternalServerErrorException('Account not found');
     }
     await this.Repository.update(account.id, data);
-    return this.findById(id);
+    return this.findAccountById(id);
   }
 
-  async remove(id: string): Promise<DefaultMessage>{
-    const account = await this.findById(id);
+  async removeAccount(id: string): Promise<DefaultMessage> {
+    const account = await this.findAccountById(id);
     const deleted = await this.Repository.softRemove(account);
 
     return new DefaultMessage(200, 'Removed account');

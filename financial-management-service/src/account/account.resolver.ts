@@ -11,31 +11,31 @@ export class AccountResolver {
 
   @Mutation(() => Category)
   async createAccount(@Args('data') data: CreateAccountInput) {
-    return this.accountService.create(data);
+    return this.accountService.createAccount(data);
   }
 
   @Query(() => [Category], { name: 'accounts' })
-  async findAll() {
-    return this.accountService.findAll();
+  async findAllAccount() {
+    return this.accountService.findAllAccount();
   }
 
   @Query(() => [Category], { name: 'accountsWithDeleted' })
   async findAllWithDeleted() {
-    return this.accountService.findAllWithDeleted();
+    return this.accountService.findAllAccountWithDeleted();
   }
 
   @Query(() => Category, { name: 'account' })
   async findOne(@Args('id') id: string) {
-    return this.accountService.findById(id)
+    return this.accountService.findAccountById(id)
   }
 
   @Mutation(() => Category)
   async updateAccount(@Args('data') data: UpdateAccountInput): Promise<Category> {
-        return this.accountService.update(data.id, data);
+        return this.accountService.updateAccount(data.id, data);
   }
 
   @Mutation(() => DefaultMessage)
   async removeAccount(@Args('id') id: string): Promise<DefaultMessage> {
-     return await this.accountService.remove(id);
+     return await this.accountService.removeAccount(id);
   }
 }

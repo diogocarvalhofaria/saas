@@ -10,26 +10,26 @@ export class SubcategoryResolver {
 
   @Mutation(() => Subcategory)
   createSubcategory(@Args('createSubcategoryInput') createSubcategoryInput: CreateSubcategoryInput) {
-    return this.subcategoryService.create(createSubcategoryInput);
+    return this.subcategoryService.createSubcategory(createSubcategoryInput);
   }
 
   @Query(() => [Subcategory], { name: 'subcategory' })
-  findAll() {
-    return this.subcategoryService.findAll();
+  findAllSubcategory() {
+    return this.subcategoryService.findAllSubcategory();
   }
 
   @Query(() => Subcategory, { name: 'subcategory' })
-  findOne(@Args('id', { type: () => Int }) id: number) {
-    return this.subcategoryService.findOne(id);
+  findOneCategory(@Args('id', { type: () => Int }) id: string) {
+    return this.subcategoryService.findOneCategory(id);
   }
 
   @Mutation(() => Subcategory)
-  updateSubcategory(@Args('updateSubcategoryInput') updateSubcategoryInput: UpdateSubcategoryInput) {
-    return this.subcategoryService.update(updateSubcategoryInput.id, updateSubcategoryInput);
+  updateSubcategory(@Args('data') data: UpdateSubcategoryInput) {
+    return this.subcategoryService.updateSubcategory(data.id, data);
   }
 
   @Mutation(() => Subcategory)
-  removeSubcategory(@Args('id', { type: () => Int }) id: number) {
-    return this.subcategoryService.remove(id);
+  removeSubcategory(@Args('id', { type: () => Int }) id: string) {
+    return this.subcategoryService.removeSubcategory(id);
   }
 }

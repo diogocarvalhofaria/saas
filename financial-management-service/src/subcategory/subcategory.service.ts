@@ -1,26 +1,80 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, InternalServerErrorException } from '@nestjs/common';
 import { CreateSubcategoryInput } from './dto/create-subcategory.input';
 import { UpdateSubcategoryInput } from './dto/update-subcategory.input';
+import { Subcategory } from './entities/subcategory.entity';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { DefaultMessage } from '../cummons/default-message';
 
 @Injectable()
 export class SubcategoryService {
-  create(createSubcategoryInput: CreateSubcategoryInput) {
-    return 'This action adds a new subcategory';
+
+  constructor(
+    @InjectRepository(Subcategory)
+    private Repository: Repository<Subcategory>) {
   }
 
-  findAll() {
-    return `This action returns all subcategory`;
+  async createSubcategory(data: CreateSubcategoryInput) {
+    try {
+      const subcategory = this.Repository.create(data);
+      const subcategorySaved = await this.Repository.save(subcategory);
+
+      return new DefaultMessage(200, 'Create Subcategory');
+    } catch (e) {
+      throw new BadRequestException(e);
+    }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} subcategory`;
+  async findAllSubcategory() {
+    try {
+      return await this.Repository.createQueryBuilder('subcategory').getMany();
+    } catch (e) {
+      throw new BadRequestException(e);
+    }
   }
 
-  update(id: number, updateSubcategoryInput: UpdateSubcategoryInput) {
-    return `This action updates a #${id} subcategory`;
+  async findOneCategory(id: string) {
+    try {
+
+      return await this.Repository.findOneBy({ id });
+
+    } catch (e) {
+      throw new BadRequestException(e);
+    }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} subcategory`;
+  async updateSubcategory(id: string, data: UpdateSubcategoryInput) {
+    try {
+      const subcategory = await this.findOneCategory(id);
+
+      if (!subcategory) {
+        throw new BadRequestException('Subcategory not found');
+      }
+      await this.Repository.update(subcategory.id, data);
+
+      return new DefaultMessage(200, 'Subcategory updated successfully.');
+
+    } catch (e) {
+      throw new BadRequestException(e);
+    }
+  }
+
+  async removeSubcategory(id: string) {
+    try {
+
+      const subcategory = await this.findOneCategory(id);
+
+
+      if (!subcategory) {
+        throw new BadRequestException('Subcategory not found');
+      }
+
+      await this.Repository.softRemove(subcategory);
+
+      return new DefaultMessage(200, 'Removed subcategory');
+
+    } catch (e) {
+      throw new BadRequestException(e);
+    }
   }
 }
