@@ -1,35 +1,40 @@
-import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
+import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
 import { SubcategoryService } from './subcategory.service';
 import { Subcategory } from './entities/subcategory.entity';
 import { CreateSubcategoryInput } from './dto/create-subcategory.input';
 import { UpdateSubcategoryInput } from './dto/update-subcategory.input';
+import { DefaultMessage } from '../cummons/default-message';
 
 @Resolver(() => Subcategory)
 export class SubcategoryResolver {
   constructor(private readonly subcategoryService: SubcategoryService) {}
 
   @Mutation(() => Subcategory)
-  createSubcategory(@Args('createSubcategoryInput') createSubcategoryInput: CreateSubcategoryInput) {
-    return this.subcategoryService.createSubcategory(createSubcategoryInput);
+  async createSubcategory(
+    @Args('data') data: CreateSubcategoryInput,
+  ): Promise<Subcategory> {
+    return this.subcategoryService.createSubcategory(data);
   }
 
-  @Query(() => [Subcategory], { name: 'subcategory' })
-  findAllSubcategory() {
-    return this.subcategoryService.findAllSubcategory();
+  @Query(() => [Subcategory], { name: 'subcategories' })
+  async findAllSubcategories(): Promise<Subcategory[]> {
+    return this.subcategoryService.findAllSubcategories();
   }
 
   @Query(() => Subcategory, { name: 'subcategory' })
-  findOneCategory(@Args('id', { type: () => Int }) id: string) {
-    return this.subcategoryService.findOneCategory(id);
+  async findOneSubcategory(@Args('id') id: string): Promise<Subcategory> {
+    return this.subcategoryService.findOneSubcategory(id);
   }
 
   @Mutation(() => Subcategory)
-  updateSubcategory(@Args('data') data: UpdateSubcategoryInput) {
+  async updateSubcategory(
+    @Args('data') data: UpdateSubcategoryInput,
+  ): Promise<Subcategory> {
     return this.subcategoryService.updateSubcategory(data.id, data);
   }
 
-  @Mutation(() => Subcategory)
-  removeSubcategory(@Args('id', { type: () => Int }) id: string) {
+  @Mutation(() => DefaultMessage)
+  async removeSubcategory(@Args('id') id: string): Promise<DefaultMessage> {
     return this.subcategoryService.removeSubcategory(id);
   }
 }

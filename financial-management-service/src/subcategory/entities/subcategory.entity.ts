@@ -26,7 +26,7 @@ export class Subcategory {
   value: number;
 
   @ManyToOne(() => Category, (category) => category.subcategories, { onDelete: 'CASCADE' })
-  @Field(() => Category)
+  @Field(() => Category, { nullable: true })
   @JoinColumn({ name: 'category_id' })
   category: Category;
 

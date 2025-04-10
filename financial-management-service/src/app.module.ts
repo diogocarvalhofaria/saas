@@ -1,10 +1,9 @@
 import { Module } from '@nestjs/common';
-import { AccountModule } from './account/account.module';
+import { CategoryModule } from './account/category.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { GraphQLModule } from '@nestjs/graphql';
 import { SubcategoryModule } from './subcategory/subcategory.module';
-import { ApolloServerPluginLandingPageGraphQLPlayground } from '@apollo/server-plugin-landing-page-graphql-playground';
 import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default';
 
 @Module({
@@ -31,7 +30,7 @@ import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin
       installSubscriptionHandlers: true,
       plugins: [ApolloServerPluginLandingPageLocalDefault()],
     }),
-    AccountModule,
+    CategoryModule,
     SubcategoryModule,
   ],
 })
